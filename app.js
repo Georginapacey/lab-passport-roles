@@ -8,7 +8,13 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+const session      = require('express-session');
+const passport     = require('passport');
 
+require('./configs/passport.configs').setup(passport);
+
+const auth = require('./routes/auth.routes');
+const user = require('./routes/user.routes');
 
 mongoose.Promise = Promise;
 mongoose
@@ -38,6 +44,9 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
       
+
+app.use('/', auth);
+app.use('/', user);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
